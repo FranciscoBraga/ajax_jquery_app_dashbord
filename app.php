@@ -92,10 +92,20 @@ class BD
 $conexao = new Conexao();
 
 $dashboard = new Dashboard();
+
+
+$competencia = explode('-', $_GET['competencia']);
+$ano = $competencia[0];
+$mes = $competencia[1];
+
+$dia_do_mes = cal_days_in_month(CAL_GREGORIAN,$mes, $ano);
+
+$dashboard->__set('data_inicio',$ano.'-'.$mes.'-'.'-01');
+$dashboard->__set('data_final', $ano.'-'.$mes.'-'.$dia_do_mes);
+
 $bd = new Bd($conexao, $dashboard);
-$dashboard->__set('data_inicio','2018-08-01');
-$dashboard->__set('data_final','2018-08-31');
 $dashboard->__set('numeroVendas', $bd->getNumeroVendas());
 $dashboard->__set('totalVendas', $bd->getTotalVendas());
 
-print_r($dashboard);
+$json = json_encode($dashboard);
+echo $json;
